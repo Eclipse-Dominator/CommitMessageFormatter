@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>Settings</h2>
+<div mat-dialog-content>
+
+  <div class="label-group">
+    <div class="label"><span>Remove double spacing</span></div>
+    <mat-slide-toggle [(ngModel)]="data.removeDoubleSpace" (change)="emitData()"></mat-slide-toggle>
+  </div>
+
+  <div class="label-group">
+    <div class="label"><span>Display font size</span> <br/>  {{data.fontSize}} px</div>
+    <mat-slider min="4" max="72" step="1" discrete>
+      <input matSliderThumb [(ngModel)]="data.fontSize" (change)="emitData()">
+    </mat-slider>
+  </div>
+
+  <div class="label-group">
+    <div class="label"><span>Max header size</span><br/>  {{data.headerCap}} chars</div>
+    <mat-slider min="20" max="200" step="1" discrete>
+      <input matSliderThumb [(ngModel)]="data.headerCap" (change)="emitData()">
+    </mat-slider>
+  </div>
+
+  <div class="label-group">
+    <div class="label"><span>Max content size</span> <br/> {{data.bodyCap}} chars</div>
+    <mat-slider min="20" max="200" step="1" discrete>
+      <input matSliderThumb [(ngModel)]="data.bodyCap" (change)="emitData()">
+    </mat-slider>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="reset()">reset</button>
+</div>

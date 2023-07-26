@@ -1,14 +1,24 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { AppComponent } from './app.component';
+import { MaterialModule } from './material.module'
 
+import { AppComponent } from './app.component';
+import { EditorComponent } from './editor/editor.component';
+import { DisplayComponent } from './display/display.component';
+import { SettingFabComponent } from './fabs/setting-fab/setting-fab.component';
+import { WarningFabComponent } from './fabs/warning-fab/warning-fab.component';
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    EditorComponent,
+    DisplayComponent,
+    SettingFabComponent,
+    WarningFabComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    MaterialModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

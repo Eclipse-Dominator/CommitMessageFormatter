@@ -1,0 +1,18 @@
+<button
+  mat-mini-fab
+  class="floating-fab"
+  color="warn"
+  [matMenuTriggerFor]="menu"
+  *ngIf="warnings?.length">
+  <mat-icon>warning</mat-icon>
+</button>
+
+<mat-menu #menu yPosition="above">
+  <div class="menu-content">
+    <button
+      *ngFor="let warning of warnings"
+      (click)="openSnackBar(warning.detail); highlightLine(warning)"
+      [matTooltip]="warning.detail"
+      mat-menu-item> Line {{warning.lineNum + 1}}</button>
+  </div>
+</mat-menu>
