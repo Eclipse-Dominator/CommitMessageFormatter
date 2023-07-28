@@ -15,3 +15,11 @@
   <app-setting-fab #setting></app-setting-fab>
 </div>
 
+<app-commit-content-bar
+  class="pages-bar"
+  #pageBar
+  (commitChange)="
+    editor.importCommitData(pageBar.activePage);
+    setting.importCommitData(pageBar.activePage);"
+  [getCurrentCommit]="editor.exportCommitData">
+</app-commit-content-bar>

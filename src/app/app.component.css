@@ -26,6 +26,13 @@
   margin: 10px;
 }
 
+.pages-bar {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  margin: 10px;
+}
 .card {
   flex: 0 0 calc(50% - 20px);
   max-width: calc(50% - 20px);

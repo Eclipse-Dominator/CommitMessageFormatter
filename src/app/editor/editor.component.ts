@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, ViewChild } from '@angular/core';
 import { Formatter, Warning } from '../model/formatter.model'
-import { DialogData, getDefaultSetting } from '../editor-setting/editor-setting.dialog';
+import { CommitStorage, SettingData, getDefaultSetting } from '../model/commit-storage';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -9,10 +9,10 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./editor.component.css']
 })
 export class EditorComponent implements AfterViewInit, OnDestroy {
-  @Input() settingChange: EventEmitter<DialogData> = new EventEmitter<DialogData>();
+  @Input() settingChange: EventEmitter<SettingData> = new EventEmitter<SettingData>();
   @ViewChild('textEditor') textEditor?: ElementRef<HTMLTextAreaElement>;
 
-  setting: DialogData = getDefaultSetting();
+  setting: SettingData = getDefaultSetting();
 
   commitMessage: string = '';
   formattedMessage: string = '';
@@ -22,7 +22,7 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.subscription = this.settingChange.subscribe((setting) => {
       this.setting = setting;
-      this.formatCommitMessage()
+      this.formatCommitMessage();
     });
   }
 
@@ -33,9 +33,17 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
   formatCommitMessage() {
     // You can implement your own logic to format the commit message here
     // For this example, let's just add "[Formatted]: " at the beginning of the commit message
-    const fmt = new Formatter(this.setting.headerCap, this.setting.bodyCap, this.setting.removeDoubleSpace);
+    const fmt = new Formatter(this.setting);
     let output = fmt.formatCommitMessage(this.commitMessage);
     this.formattedMessage = output.result;
     this.warnings = output.warnings;
+  }
+
+  public exportCommitData = () => new CommitStorage(this.commitMessage, this.setting);
+
+  importCommitData(data: CommitStorage) {
+    this.setting = data.setting;
+    this.commitMessage = data.commitMessage;
+    this.formatCommitMessage();
   }
 }
