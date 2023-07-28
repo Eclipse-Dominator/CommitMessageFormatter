@@ -1,3 +1,5 @@
+import { SettingData, getDefaultSetting } from "./commit-storage";
+
 export type Warning = {
   lineNum: number;
   targetText?: string;
@@ -26,10 +28,10 @@ export class Formatter {
   multiLevelNumericalDelimiters = /(^ *(\d+\.){2,} )/;
   multiLevelCharDelimiters = /(^ *([a-zA-Z]\.){2,} )/;
 
-  constructor(maxHeaderLen: number, maxLineLen: number, removeDoubleSpaces: boolean = true) {
-    this.maxHeaderLen = maxHeaderLen;
-    this.maxLineLen = maxLineLen;
-    this.removeDoubleSpaces = removeDoubleSpaces;
+  constructor(settings: SettingData = getDefaultSetting()) {
+    this.maxHeaderLen = settings.headerCap;
+    this.maxLineLen = settings.bodyCap;
+    this.removeDoubleSpaces = settings.removeDoubleSpace;
   }
 
   detectIndentation(line: string): number {

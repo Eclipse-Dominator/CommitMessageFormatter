@@ -1,0 +1,60 @@
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.trigger-btn {
+  margin-bottom: 5px;
+}
+
+.new-page-btn {
+  margin-left: 10px;
+  transition: box-shadow 0.3s ease-in-out;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+}
+
+.new-page-btn:hover {
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+}
+
+.new-page-content {
+  font-size: 20px;
+}
+
+.bar-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.bar-container:hover>.trigger-btn {
+  display: none;
+}
+
+.bar-container:hover>.pages-bar {
+  display: flex;
+}
+
+.pages-bar {
+  display: none;
+  flex-direction: row;
+  align-items: center;
+  animation: fade-in 0.1s ease-out;
+}
+
+mat-chip-option {
+  transition: transform 0.2s ease-in-out;
+  animation: fade-in 0.1s ease-out;
+  transform-origin: center center;
+}
+
+mat-chip-option.selected {
+  transform: scale(1.1);
+  z-index: 1;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}

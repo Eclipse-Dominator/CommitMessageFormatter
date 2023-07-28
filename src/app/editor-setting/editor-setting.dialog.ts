@@ -6,22 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
-
-export interface DialogData {
-  headerCap: number;
-  bodyCap: number;
-  removeDoubleSpace: boolean;
-  fontSize: number;
-};
-
-export const getDefaultSetting: () => DialogData = () => {
-  return {
-    headerCap: 50,
-    bodyCap: 72,
-    removeDoubleSpace: true,
-    fontSize: 16,
-  };
-};
+import { SettingData, getDefaultSetting } from '../model/commit-storage';
 
 @Component({
   selector: 'app-editor-setting',
@@ -39,11 +24,11 @@ export const getDefaultSetting: () => DialogData = () => {
   ],
 })
 export class EditorSettingDialog {
-  public contentChange: EventEmitter<DialogData> = new EventEmitter<DialogData>();
+  public contentChange: EventEmitter<SettingData> = new EventEmitter<SettingData>();
 
   constructor(
     public dialogRef: MatDialogRef<EditorSettingDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    @Inject(MAT_DIALOG_DATA) public data: SettingData,
   ) { }
 
   emitData() {
@@ -55,3 +40,5 @@ export class EditorSettingDialog {
     this.emitData();
   }
 }
+export { SettingData, getDefaultSetting };
+

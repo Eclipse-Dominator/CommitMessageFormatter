@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
-import { EditorSettingDialog, DialogData, getDefaultSetting } from '../../editor-setting/editor-setting.dialog'
+import { EditorSettingDialog } from '../../editor-setting/editor-setting.dialog'
+import { CommitStorage, getDefaultSetting, SettingData } from '../../model/commit-storage';
 
 @Component({
   selector: 'app-setting-fab',
@@ -9,18 +10,18 @@ import { EditorSettingDialog, DialogData, getDefaultSetting } from '../../editor
   styleUrls: ['./setting-fab.component.css']
 })
 export class SettingFabComponent {
-  @Output() settingChange = new EventEmitter<DialogData>();
+  @Output() settingChange = new EventEmitter<SettingData>();
 
-  editorSettings: DialogData = getDefaultSetting();
+  editorSettings: SettingData = getDefaultSetting();
 
   constructor(public dialog: MatDialog) { }
 
   openSettingDialog() {
-    const dialogRef: MatDialogRef<EditorSettingDialog, DialogData> = this.dialog.open(EditorSettingDialog, {
+    const dialogRef: MatDialogRef<EditorSettingDialog, SettingData> = this.dialog.open(EditorSettingDialog, {
       data: this.editorSettings
     });
 
-    const subscription = dialogRef.componentInstance.contentChange.subscribe((data: DialogData) => {
+    const subscription = dialogRef.componentInstance.contentChange.subscribe((data: SettingData) => {
       this.editorSettings = data;
       this.settingChange.emit(data);
     });
@@ -28,5 +29,10 @@ export class SettingFabComponent {
     dialogRef.afterClosed().subscribe(() => {
       subscription.unsubscribe();
     });
+  }
+
+  importCommitData(data: CommitStorage) {
+    this.editorSettings = data.setting;
+    this.settingChange.emit(this.editorSettings);
   }
 }
