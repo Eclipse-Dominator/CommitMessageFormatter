@@ -20,12 +20,14 @@
         [selected]="activePageIndex === i"
         [class.selected]="activePageIndex === i"
         [selectable]="activePageIndex !== i"
-        [matTooltip]="activePageIndex !== i ? page.title : ''">
+        [matTooltip]="activePageIndex !== i ? page.title : ''"
+        (removed)="removePage(i)">
         {{ i + 1 }}
+        <mat-icon matChipRemove *ngIf="pages.length > 1 && activePageIndex === i" class="cancel-btn">cancel</mat-icon>
       </mat-chip-option>
     </mat-chip-listbox>
 
-    <mat-chip class="new-page-btn" (click)="createNewPage()" *ngIf="pages.length < 6">
+    <mat-chip class="new-page-btn" (click)="createNewPage()" *ngIf="pages.length < 10">
       <span class="new-page-content">+</span>
     </mat-chip>
   </div>
