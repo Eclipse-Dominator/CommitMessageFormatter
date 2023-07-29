@@ -17,8 +17,9 @@ export class SettingFabComponent {
   constructor(public dialog: MatDialog) { }
 
   openSettingDialog() {
-    const dialogRef: MatDialogRef<EditorSettingDialog, SettingData> = this.dialog.open(EditorSettingDialog, {
-      data: this.editorSettings
+    const dialogRef: MatDialogRef<EditorSettingDialog, any> = this.dialog.open(EditorSettingDialog, {
+      data: this.editorSettings,
+      width: '50vw',
     });
 
     const subscription = dialogRef.componentInstance.contentChange.subscribe((data: SettingData) => {

@@ -10,9 +10,15 @@
 <mat-menu #menu yPosition="above">
   <div class="menu-content">
     <button
+      extended
       *ngFor="let warning of warnings"
       (click)="openSnackBar(warning.detail); highlightLine(warning)"
       [matTooltip]="warning.detail"
-      mat-menu-item> Line {{warning.lineNum + 1}}</button>
+      mat-menu-item>
+      <mat-icon [color]="severityToIcon[warning.severity].color">
+        {{ severityToIcon[warning.severity].icon }}
+      </mat-icon>
+      Line {{warning.lineNum + 1}}
+    </button>
   </div>
 </mat-menu>

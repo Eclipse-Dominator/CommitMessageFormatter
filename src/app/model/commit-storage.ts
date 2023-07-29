@@ -1,17 +1,30 @@
 import { Formatter } from "./formatter.model";
 
+export type WarningRange = {
+  range: [number, number];
+  isRange: boolean;
+  enableToggle: boolean;
+};
 
 export interface SettingData {
-  headerCap: number;
-  bodyCap: number;
+  headerCap: WarningRange;
+  bodyCap: WarningRange;
   removeDoubleSpace: boolean;
   fontSize: number;
 };
 
 export const getDefaultSetting: () => SettingData = () => {
   return {
-    headerCap: 50,
-    bodyCap: 72,
+    headerCap: {
+      range: [50, 72],
+      isRange: true,
+      enableToggle: true,
+    },
+    bodyCap: {
+      range: [72, 72],
+      isRange: false,
+      enableToggle: false,
+    },
     removeDoubleSpace: true,
     fontSize: 16,
   };

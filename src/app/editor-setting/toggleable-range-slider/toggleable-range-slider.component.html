@@ -1,0 +1,18 @@
+<div class="slider-container">
+  <mat-slider [min]="min" [max]="max" [step]="step" discrete *ngIf="settings.isRange" class="slider">
+    <input matSliderStartThumb [(ngModel)]="settings.range[0]" (change)="emitData()">
+    <input matSliderEndThumb [(ngModel)]="settings.range[1]" (change)="emitData()">
+  </mat-slider>
+
+  <mat-slider [min]="min" [max]="max" [step]="step" discrete *ngIf="!settings.isRange" class="slider">
+    <input matSliderThumb [(ngModel)]="settings.range[1]" (change)="syncLowerBound();emitData()">
+  </mat-slider>
+
+  <mat-checkbox
+    *ngIf="settings.enableToggle"
+    class="checkbox-margin"
+    [(ngModel)]="settings.isRange"
+    matTooltip="Enable Warning"
+    (change)="emitData()">
+  </mat-checkbox>
+</div>

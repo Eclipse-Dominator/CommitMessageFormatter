@@ -5,6 +5,7 @@ export type Warning = {
   targetText?: string;
   lineRange?: [number, number];
   detail: string;
+  severity: "low" | "medium" | "high";
 };  // warnings are unformattable issues*
 
 export type FormatResult = {
@@ -19,19 +20,16 @@ type PartialResult = {
 }
 
 export class Formatter {
-  maxHeaderLen: number;
-  maxLineLen: number;
-  removeDoubleSpaces: boolean;
-  listDelimiters = /(^ *[-+*] )/;
-  orderedDelimiters = /(^ *(?:[a-zA-Z]|\d+)[.)] )/;
-  enclosedDelimeters = /(^ *\((?:[a-zA-Z]|\d+)\) )/;
-  multiLevelNumericalDelimiters = /(^ *(\d+\.){2,} )/;
-  multiLevelCharDelimiters = /(^ *([a-zA-Z]\.){2,} )/;
+
+  private settings: SettingData;
+  private listDelimiters = /(^ *[-+*] )/;
+  private orderedDelimiters = /(^ *(?:[a-zA-Z]|\d+)[.)] )/;
+  private enclosedDelimeters = /(^ *\((?:[a-zA-Z]|\d+)\) )/;
+  private multiLevelNumericalDelimiters = /(^ *(\d+\.){2,} )/;
+  private multiLevelCharDelimiters = /(^ *([a-zA-Z]\.){2,} )/;
 
   constructor(settings: SettingData = getDefaultSetting()) {
-    this.maxHeaderLen = settings.headerCap;
-    this.maxLineLen = settings.bodyCap;
-    this.removeDoubleSpaces = settings.removeDoubleSpace;
+    this.settings = settings;
   }
 
   detectIndentation(line: string): number {
@@ -54,30 +52,34 @@ export class Formatter {
   }
 
   handleLine(currentLine: string, pr: PartialResult, indentSize: number) {
+    const maxLineLen = this.settings.bodyCap.range[1];
+
     if (indentSize === 0) currentLine = currentLine.trim();
-    if (indentSize >= this.maxLineLen - 1) {
+    if (indentSize >= maxLineLen - 1) {
       pr.warnings.push({
         lineNum: pr.index,
         lineRange: [0, indentSize],
-        detail: `Line contains an indent that is too long`
+        detail: `Line contains an indent that is too long`,
+        severity: "high"
       });
       indentSize = 0;
     }
     let containLongWord = false;
-    while (currentLine.length >= this.maxLineLen) {
-      const splitIndex: number = currentLine.lastIndexOf(" ", this.maxLineLen);
+    while (currentLine.length >= maxLineLen) {
+      const splitIndex: number = currentLine.lastIndexOf(" ", maxLineLen);
       if (splitIndex === -1 || splitIndex <= indentSize) {
         if (!containLongWord) {
-          const nextSpaceIndex = currentLine.indexOf(" ", this.maxLineLen);
+          const nextSpaceIndex = currentLine.indexOf(" ", maxLineLen);
           pr.warnings.push({
             lineNum: pr.index,
             targetText: currentLine.substring(indentSize, nextSpaceIndex === -1 ? currentLine.length : nextSpaceIndex),
-            detail: `line contains a word that is too long to fit into 1 line (> ${this.maxLineLen} characters))`
+            detail: `Line contains a word that is too long to fit into 1 line`,
+            severity: "high"
           });
           containLongWord = true;
         }
-        pr.partialResult.push(currentLine.substring(0, this.maxLineLen));
-        currentLine = currentLine.substring(this.maxLineLen + 1);
+        pr.partialResult.push(currentLine.substring(0, maxLineLen));
+        currentLine = currentLine.substring(maxLineLen + 1);
       } else {
         pr.partialResult.push(currentLine.substring(0, splitIndex));
         currentLine = currentLine.substring(splitIndex + 1);
@@ -88,11 +90,23 @@ export class Formatter {
   }
 
   evaluateHeader(line: string, pr: PartialResult) {
-    if (line.length > this.maxHeaderLen) {
+    const maxLineLen = this.settings.headerCap.range[1];
+    const warningLineLen = this.settings.headerCap.range[0];
+    const allowWarning = this.settings.headerCap.isRange;
+
+    if (line.length > maxLineLen) {
       pr.warnings.push({
         lineNum: pr.index,
         lineRange: [0, line.length],
-        detail: `Header exceeded maximum length of ${this.maxHeaderLen} characters by ${line.length - this.maxHeaderLen} characters`
+        detail: `Subject line exceeded maximum length of ${maxLineLen} characters by ${line.length - maxLineLen} characters`,
+        severity: "high"
+      });
+    } else if (allowWarning && line.length > warningLineLen) {
+      pr.warnings.push({
+        lineNum: pr.index,
+        lineRange: [0, line.length],
+        detail: `Try to limit the subject line to ${warningLineLen} characters (exceeded by ${line.length - warningLineLen} characters)`,
+        severity: "medium"
       });
     }
 
@@ -100,7 +114,8 @@ export class Formatter {
       pr.warnings.push({
         lineNum: pr.index,
         lineRange: [line.length - 1, line.length],
-        detail: "Commit message subject should not end with a period."
+        detail: "Commit message subject should not end with a period.",
+        severity: "low"
       });
     }
   }
@@ -125,7 +140,7 @@ export class Formatter {
   formatCommitMessage(commitMessage: string): FormatResult {
     commitMessage = commitMessage.replaceAll("\r\n", "\n");
     // commitMessage = commitMessage.replaceAll(/\n{3,}/g, "\n\n");
-    if (this.removeDoubleSpaces) {
+    if (this.settings.removeDoubleSpace) {
       // replace all double spaces with single spaces except for start of line
       commitMessage = commitMessage.replaceAll(/([^\n ] ) +/g, (match, p1) => p1);
     }

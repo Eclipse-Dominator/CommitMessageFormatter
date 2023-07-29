@@ -2,12 +2,33 @@ import { Component, Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Warning } from '../../model/formatter.model'
 
+type IconDisplay = {
+  icon: string,
+  color: string,
+}
+
 @Component({
   selector: 'app-warning-fab',
   templateUrl: './warning-fab.component.html',
   styleUrls: ['./warning-fab.component.css'],
 })
 export class WarningFabComponent {
+
+  severityToIcon: { [key: string]: IconDisplay } = {
+    'low': {
+      icon: 'info',
+      color: 'primary',
+    },
+    'medium': {
+      icon: 'warning',
+      color: 'accent',
+    },
+    'high': {
+      icon: 'error',
+      color: 'warn',
+    },
+  }
+
   @Input() warnings?: Warning[] = [];
   textEditor?: HTMLTextAreaElement;
 
