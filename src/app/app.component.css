@@ -11,6 +11,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
 
   height: 100%;
   width: 100%;
@@ -33,13 +34,17 @@
   display: flex;
   margin: 10px;
 }
+
 .card {
+  display: flex;
   flex: 0 0 calc(50% - 20px);
   max-width: calc(50% - 20px);
+  justify-content: center;
   padding: 10px;
+  align-items: center;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 1000px) {
   .card {
     flex: 0 0 calc(100% - 10px);
     /* One card per row with a small gap between them */

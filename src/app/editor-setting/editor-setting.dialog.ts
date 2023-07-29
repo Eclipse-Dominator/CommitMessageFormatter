@@ -7,6 +7,8 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { SettingData, getDefaultSetting } from '../model/commit-storage';
+import { ToggleableRangeSliderComponent } from './toggleable-range-slider/toggleable-range-slider.component';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-editor-setting',
@@ -20,7 +22,9 @@ import { SettingData, getDefaultSetting } from '../model/commit-storage';
     MatCardModule,
     MatSliderModule,
     MatSlideToggleModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    NgIf,
+    ToggleableRangeSliderComponent
   ],
 })
 export class EditorSettingDialog {
@@ -28,11 +32,11 @@ export class EditorSettingDialog {
 
   constructor(
     public dialogRef: MatDialogRef<EditorSettingDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: SettingData,
+    @Inject(MAT_DIALOG_DATA) public data: any,
   ) { }
 
-  emitData() {
-    this.contentChange.emit(this.data);
+  emitData(data: SettingData = this.data) {
+    this.contentChange.emit(data);
   }
 
   reset() {

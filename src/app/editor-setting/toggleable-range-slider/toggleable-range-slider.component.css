@@ -1,0 +1,13 @@
+.checkbox-margin {
+  margin: 10px 0;
+}
+
+.slider-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.slider {
+  width: 100%;
+}

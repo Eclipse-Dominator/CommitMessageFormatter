@@ -1,30 +1,48 @@
 <h2 mat-dialog-title>Settings</h2>
-<div mat-dialog-content>
-
+<div mat-dialog-content class="mat-typography">
   <div class="label-group">
-    <div class="label"><span>Remove double spacing</span></div>
-    <mat-slide-toggle [(ngModel)]="data.removeDoubleSpace" (change)="emitData()"></mat-slide-toggle>
+    <div class="label"><span class="label-title">Remove double spacing</span></div>
+    <mat-slide-toggle class="label-item" [(ngModel)]="data.removeDoubleSpace" (change)="emitData()"></mat-slide-toggle>
   </div>
 
   <div class="label-group">
-    <div class="label"><span>Display font size</span> <br/>  {{data.fontSize}} px</div>
-    <mat-slider min="4" max="72" step="1" discrete>
+    <div class="label">
+      <span class="label-title">Display font size</span> <br/>  {{data.fontSize}} px
+    </div>
+    <mat-slider min="4" max="72" step="1" discrete class="label-item">
       <input matSliderThumb [(ngModel)]="data.fontSize" (change)="emitData()">
     </mat-slider>
   </div>
 
   <div class="label-group">
-    <div class="label"><span>Max header size</span><br/>  {{data.headerCap}} chars</div>
-    <mat-slider min="20" max="200" step="1" discrete>
-      <input matSliderThumb [(ngModel)]="data.headerCap" (change)="emitData()">
-    </mat-slider>
+    <div class="label">
+      <span class="label-title">Max header size</span><br/>
+        <span *ngIf="data.headerCap.isRange">
+          Soft cap: ≥ {{data.headerCap.range[0]}} chars <br/>
+        </span>
+      <span>Hard cap: ≥ {{data.headerCap.range[1]}} chars</span>
+    </div>
+    <app-toggleable-range-slider
+      class="label-item"
+      [min]="20"
+      [max]="150"
+      [step]="1"
+      [settings]="data.headerCap"
+      (settingsChange)="data.headerCap=$event; emitData()"></app-toggleable-range-slider>
   </div>
 
   <div class="label-group">
-    <div class="label"><span>Max content size</span> <br/> {{data.bodyCap}} chars</div>
-    <mat-slider min="20" max="200" step="1" discrete>
-      <input matSliderThumb [(ngModel)]="data.bodyCap" (change)="emitData()">
-    </mat-slider>
+    <div class="label">
+      <span class="label-title">Max content size</span> <br/>
+      Break line when ≥ {{data.bodyCap.range[1]}} chars
+    </div>
+    <app-toggleable-range-slider
+      class="label-item"
+      [min]="20"
+      [max]="150"
+      [step]="1"
+      [settings]="data.bodyCap"
+      (settingsChange)="data.bodyCap=$event; emitData()"></app-toggleable-range-slider>
   </div>
 </div>
 <div mat-dialog-actions>
