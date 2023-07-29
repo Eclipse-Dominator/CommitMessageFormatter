@@ -36,4 +36,16 @@ export class CommitContentBarComponent {
     this.activePageIndex = index;
     this.commitChange.emit(this.pages[index]);
   }
+
+  removePage(index: number) {
+    if (this.pages.length === 1) {
+      return;
+    }
+
+    this.pages.splice(index, 1);
+    if (this.activePageIndex >= this.pages.length) {
+      this.activePageIndex = this.pages.length - 1;
+    }
+    this.commitChange.emit(this.pages[this.activePageIndex]);
+  }
 }

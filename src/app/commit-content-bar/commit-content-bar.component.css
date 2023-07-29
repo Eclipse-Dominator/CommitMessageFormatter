@@ -47,6 +47,9 @@
   animation: fade-in 0.1s ease-out;
 }
 
+.cancel-btn {
+  animation: fade-in 0.1s ease-out;
+}
 mat-chip-option {
   transition: transform 0.2s ease-in-out;
   animation: fade-in 0.1s ease-out;
